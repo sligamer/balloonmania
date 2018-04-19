@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         startGameBtn.setOnClickListener(this)
 
         // TASK 2: SETUP THE QUESTIONS DATABASE
+        //TODO: do we add settings to check if database of questions does not exist.
+        // Allow for a settings screen to create db and new randomized questions
+
         db = DbContextHelperClass(this)
         db.writableDatabase
 }
