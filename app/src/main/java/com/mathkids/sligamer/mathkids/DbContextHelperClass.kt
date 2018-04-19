@@ -23,7 +23,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
     companion object {
 
         // DB AND TABLE
-        const val DATABASE_VERSION: Int = 7
+        const val DATABASE_VERSION: Int = 8
         const val DATABASE_NAME: String = "math_DB"
         const val DATABASE_TABLE: String = "math_Questions"
 
@@ -38,7 +38,6 @@ class DbContextHelperClass: SQLiteOpenHelper {
     }
 
     // DECLARE RANDOM QUESTION GENERATOR
-    private var level = 0
     private var answer = 0
     private var operator = 0
     private var operand1 = 0
@@ -212,8 +211,9 @@ class DbContextHelperClass: SQLiteOpenHelper {
     {
         var db =  this.readableDatabase
         var questionClassList = ArrayList<QuestionClass>()
+        val maxQuestionCount = 19
 
-        // TODO: WORK TO OPTIMIZE THIS QUERY TO GET A BETTER RANDOM QUESTION
+            // TODO: WORK TO OPTIMIZE THIS QUERY TO GET A BETTER RANDOM QUESTION
 /*        var cursor: Cursor = db.query(DATABASE_TABLE, arrayOf( KEY_QUESTION_ID, KEY_QUESTION_COEFFICIENT_ONE,
                 KEY_QUESTION_OPERATOR, KEY_QUESTION_COEFFICIENT_TW0, KEY_QUESTION_ANSWER, KEY_QUESTION_LEVEL),
                 "$KEY_QUESTION_LEVEL=?", arrayOf("$level"), "$KEY_QUESTION_LEVEL=$level",
@@ -225,8 +225,8 @@ class DbContextHelperClass: SQLiteOpenHelper {
             id > 0 -> db.rawQuery("SELECT DISTINCT * FROM $DATABASE_TABLE WHERE _id = ?",
                     arrayOf( "$id"))
             else -> {
-                db.rawQuery("SELECT DISTINCT * FROM $DATABASE_TABLE WHERE level = ? ORDER BY RANDOM() LIMIT 19",
-                        arrayOf("$level"))
+                db.rawQuery("SELECT DISTINCT * FROM $DATABASE_TABLE WHERE level = ? ORDER BY RANDOM() LIMIT ?",
+                        arrayOf("$level", "$maxQuestionCount"))
             }
         }
 

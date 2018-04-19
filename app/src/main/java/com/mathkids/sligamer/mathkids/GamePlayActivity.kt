@@ -1,13 +1,16 @@
 package com.mathkids.sligamer.mathkids
 
 
+import android.os.AsyncTask.execute
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import java.lang.Integer.parseInt
 import android.os.Handler
 import android.os.SystemClock
+import android.support.v7.app.AlertDialog
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import java.util.*
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -37,6 +40,8 @@ class GamePlayActivity: AppCompatActivity(){
     // WATCH TIME CLASS
     private lateinit var watchTime: GameWatch
 
+    private val gameOptions = arrayOf("Instructions", "Start Game")
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -59,7 +64,7 @@ class GamePlayActivity: AppCompatActivity(){
                     passedLevel >= 0 ->
                         level = passedLevel
                 }
-                questionID = getQuestion(passedLevel.toString())
+                //questionID = getQuestion(passedLevel.toString())
             }
         }
 
@@ -75,29 +80,26 @@ class GamePlayActivity: AppCompatActivity(){
 
         // TASK: 6 START THE TIMER
         // TODO: change the timer to seconds add thread to stop game if level time reached
-        startTimer()
+        //startTimer()
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Timer Begins").setSingleChoiceItems(
+                gameOptions,
+                0
+        ) { dialog, which ->
+            startTimer()
+            dialog.dismiss()
+        }
+
+        // TASK 3: SHOW THE DIALOG
+        val ad = builder.create()
+        ad.show()
     }
 
-
-    private fun getQuestion(level: String) : Int {
-        // create the database for storing questions
-        db = DbContextHelperClass(this)
-        var q = db.getQuestion(0,level)
-        question.text = q!!.questionProblem
-        return q.questionID
-    }
-
-    private fun getQuestion(id: Int, level: String) : QuestionClass {
-        // create the database for storing questions
-        db = DbContextHelperClass(this)
-        var q = db.getQuestion(id,level)
-        return q!!
-    }
 
     // METHOD FOR SETTINGS DEFAULTS
     private fun setupGameDefaults() {
         // set score to 0
-        scoreTxt.text = "0"
+        scoreTxt.text = """Score: ${0}"""
         // set the answer to default
         answerTxt.text = "= ?"
     }
@@ -110,63 +112,33 @@ class GamePlayActivity: AppCompatActivity(){
 
     // METHOD TO DISPLAY BALLOON GRID IN ANOTHER THREAD
     private fun displayBalloons() {
-        mHandler.postDelayed(displayBalloonsRunnable,  10)
+        mHandler.postDelayed(displayBalloonsRunnable,  0)
     }
 
     // METHOD START THE TIMER
     private fun startTimer()
     {
         // TASK 2: SET THE START TIME AND CALL THE CUSTOM HANDLER
-        watchTime.setStartTime(SystemClock.uptimeMillis())
-        mHandler.postDelayed(updateTimerRunnable,  20)
+        watchTime.setStartTime(SystemClock.elapsedRealtime())
+        mHandler.postDelayed(updateTimerRunnable,  0)
 
-    }
-
-    private fun stopTimer()
-    {
-        // TASK 1: DISABLE THE START BUTTON
-        // AND ENABLE STOP BUTTON
-
-        // TASK 2: UPDATE THE STORED TIME VALUE
-        watchTime.addStoredTime(timeInMilliseconds)
-
-        // TASK 3: HANDLER CLEARS THE MESSAGE QUEUE
-        mHandler.removeCallbacks(updateTimerRunnable)
-    }
-
-    private fun resetTimer(){
-        // TASK 1: RESET THE WATCHTIME
-        watchTime.resetWatchTime()
-
-        // TASK 2: RESET VARIABLES TO 0
-        timeInMilliseconds = 0L
-        var minutes = 0
-        var seconds= 0
-        var milliseconds = 0
-
-        // TASK 3: DISPLAY THE TIME IN THE TIMERVIEW
-        timeDisplay.text = String.format("%02d", minutes) + ":" +
-                String.format("%02d", seconds) + ":" +
-                String.format("%02d", milliseconds)
     }
 
     // THREAD HANDLER FOR UPDATING TIMER
     private val updateTimerRunnable: Runnable = object: Runnable {
         override fun run() {
+
             // TASK 1: COMPUTE THE TIME DIFFERENCE
             timeInMilliseconds = (SystemClock.uptimeMillis() - watchTime.getStartTime())
             watchTime.setTimeUpdate(watchTime.getStoredTime() + timeInMilliseconds)
             var time = (watchTime.getTimeUpdate() / 1000)
 
-            // TASK 2: COMPUTE MINUTES, SECONDS, AND MILLISECONDS
-            var minutes = (time / 60)
+            // TASK 2: COMPUTE SECONDS
             var seconds = (time % 60)
             var milliseconds = (watchTime.getTimeUpdate() % 1000)
 
             // TASK 3: DISPLAY THE TIME IN THE TIMERVIEW
-            timeDisplay.text = String.format("%02d", minutes) + ":" +
-                    String.format("%02d", seconds) + ":" +
-                    String.format("%02d", milliseconds)
+            timeDisplay.text = String.format("%02d", seconds)
 
             // TASK 4: SPECIFY NO TIME LAPSE BETWEEN POSTING
             mHandler.postDelayed(this, 5)
@@ -180,57 +152,59 @@ class GamePlayActivity: AppCompatActivity(){
 
 
     // THREAD HANDLER FOR UPDATING BALLOON GRIDVIEW
-    private val displayBalloonsRunnable: Runnable = Runnable {
+    private val displayBalloonsRunnable: Runnable = object: Runnable {
+        override fun run() {
 
-        // TASK 1: Display balloons grid
-        gridView = findViewById(R.id.gridview)
-        // GET QUESTIONs        var db = DbContextHelperClass(this)
+            // TASK 1: Display balloons grid
+            gridView = findViewById(R.id.gridview)
+            db = DbContextHelperClass(applicationContext)
+            var questions: ArrayList<QuestionClass>? = db.getQuestions(0, level.toString())
+            var random = Random()
+            var randomQuestion = random.nextInt(questions!!.count())
+            question.text = questions!![randomQuestion].questionProblem
+            answer = questions!![randomQuestion].questionAnswer.toInt()
 
-        var questions: ArrayList<QuestionClass>? = db.getQuestions(0, level.toString())
+            var madapter = ImageAdapter(applicationContext, questions)
+            gridView.adapter = madapter
 
-        var madapter = ImageAdapter(applicationContext, questions)
-        gridView.adapter = madapter
+            // TASK 2: Implement On Item click listener
+            gridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
 
-        // TASK 2: Implement On Item click listener
-        gridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
+                // TODO: add a fragment or intent here to execute this logic in thread handler
+                // view tag Holds the answer to the question
+                view.tag = view.tag
 
-            // TODO: add a fragment or intent here to execute this logic in thread handler
-            view.tag = "$position" // get the question
-           //view.tag = getQuestion(questionID, level.toString()).questionAnswer
+                // tag will be assigned to all the balloon images this will be the answer
+                val enteredNum = parseInt(view!!.tag.toString())
 
-            Toast.makeText(applicationContext, view.tag as String, Toast.LENGTH_SHORT).show()
+                if (answerTxt.text.toString().endsWith("?")) {
+                    answerTxt.text = """= $enteredNum"""
+                    val answerContent = answerTxt.text.toString()
+                    if (!answerContent.endsWith("?")) {
+                        val enteredAnswer = Integer.parseInt(answerContent.substring(2))
+                        val exScore = getScore()
+                        if (enteredAnswer == answer) {
+                            //correct
+                            scoreTxt.text = """Score: ${exScore + 1}"""
 
-            // tag will be assigned to all the balloon images this will be the answer
-            val enteredNum = parseInt(view!!.tag.toString())
-            answer = getQuestion(questionID, level.toString()).questionAnswer.toInt()
-            if (answerTxt.text.toString().endsWith("?")) {
-                answerTxt.text = """= $enteredNum"""
-                val answerContent = answerTxt.text.toString()
-                if (!answerContent.endsWith("?")) {
-                    val enteredAnswer = Integer.parseInt(answerContent.substring(2))
-                    val exScore = getScore()
-                    if (enteredAnswer == answer) {
-                        //correct
-                        scoreTxt.text = """Score: ${exScore + 1}"""
-                        //TODO: Touch event gesture class to do animations
+                            // set the answer to default
+                            answerTxt.text = "= ?"
+                            //TODO: Touch event gesture class to do animations
 
-                        // next question
-                        var db = DbContextHelperClass(applicationContext)
-                        db.getQuestion(0 , level.toString())
+                            // restart thread
+                            mHandler.postDelayed(this,  0)
+                        } else {
+                            //incorrect
+                            answerTxt.text = "= ?"
+                            var currentImage = madapter.getView(position, view, parent) as ImageView
+                            //TODO: Touch event gesture class to do animations
+                            currentImage.setImageResource(R.mipmap.response_balloon)
 
-                        // restart thread
-                        displayBalloons()
-                    } else {
-                        //incorrect
-                        answerTxt.text = "= ?"
-                        var currentImage = madapter.getView( position, view, parent) as ImageView
-                        //TODO: Touch event gesture class to do animations
-                        currentImage.setImageResource(R.mipmap.response_balloon)
-
+                        }
                     }
+                } else {
+                    answerTxt.text = enteredNum.toString()
                 }
-            } else {
-                answerTxt.text = enteredNum.toString()
             }
         }
     }

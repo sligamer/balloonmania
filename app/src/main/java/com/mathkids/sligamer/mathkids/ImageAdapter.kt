@@ -22,17 +22,6 @@ import java.util.ArrayList
 class ImageAdapter(private val mContext: Context, private var questions: ArrayList<QuestionClass>?) : BaseAdapter() {
 
     // ARRAY OF BALLOON IMAGES
-    private val mThumbIds = arrayOf(
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon,
-            R.mipmap.balloon, R.mipmap.balloon)
-
 
     override fun getCount(): Int = questions!!.size
 
@@ -49,7 +38,8 @@ class ImageAdapter(private val mContext: Context, private var questions: ArrayLi
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = ImageView(mContext)
-            imageView.id = questions!![position].questionAnswer.toInt()
+            imageView.id = questions!![position].questionID
+            imageView.tag = questions!![position].questionAnswer
             imageView.layoutParams = ViewGroup.LayoutParams(200, 200)
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
             imageView.setPadding(5, 5, 5, 5)
