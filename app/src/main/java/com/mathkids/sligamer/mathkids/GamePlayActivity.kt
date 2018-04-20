@@ -35,7 +35,6 @@ class GamePlayActivity: AppCompatActivity(){
 
     // TIME ELEMENTS
     private lateinit var mHandler: Handler
-    private var timeInMilliseconds: Long = 0L
 
     // WATCH TIME CLASS
     private lateinit var watchTime: GameWatch
@@ -129,13 +128,10 @@ class GamePlayActivity: AppCompatActivity(){
         override fun run() {
 
             // TASK 1: COMPUTE THE TIME DIFFERENCE
-            timeInMilliseconds = (SystemClock.uptimeMillis() - watchTime.getStartTime())
-            watchTime.setTimeUpdate(watchTime.getStoredTime() + timeInMilliseconds)
-            var time = (watchTime.getTimeUpdate() / 1000)
+            val time = (watchTime.getTimeUpdate() / 1000)
 
             // TASK 2: COMPUTE SECONDS
-            var seconds = (time % 60)
-            var milliseconds = (watchTime.getTimeUpdate() % 1000)
+            val seconds = (time % 60)
 
             // TASK 3: DISPLAY THE TIME IN THE TIMERVIEW
             timeDisplay.text = String.format("%02d", seconds)
@@ -147,6 +143,11 @@ class GamePlayActivity: AppCompatActivity(){
             // LEVEL TIME GOTO NEXT LEVEL
             // OR RESTART LEVEL
             // TODO: TIMER LEVEL OPTIONS
+            when (seconds){
+                60L -> {
+                    // TODO: create intent, fragment, or  animation to prompt players time ran out start next level
+                }
+            }
         }
     }
 
@@ -158,9 +159,9 @@ class GamePlayActivity: AppCompatActivity(){
             // TASK 1: Display balloons grid
             gridView = findViewById(R.id.gridview)
             db = DbContextHelperClass(applicationContext)
-            var questions: ArrayList<QuestionClass>? = db.getQuestions(0, level.toString())
-            var random = Random()
-            var randomQuestion = random.nextInt(questions!!.count())
+            val questions: ArrayList<QuestionClass>? = db.getQuestions(0, level.toString())
+            val random = Random()
+            val randomQuestion = random.nextInt(questions!!.count())
             question.text = questions!![randomQuestion].questionProblem
             answer = questions!![randomQuestion].questionAnswer.toInt()
 
