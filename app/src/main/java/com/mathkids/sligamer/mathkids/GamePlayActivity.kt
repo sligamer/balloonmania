@@ -15,7 +15,7 @@ import java.util.*
 /**
  * Created by Justin Freres on 4/10/2018.
  * Final Project Balloon Mania
- * Plugin Support with kotlin_version = '1.2.31'
+ * Plugin Support with kotlin_version = '1.2.40'
  */
 
 class GamePlayActivity: AppCompatActivity(){
@@ -34,7 +34,8 @@ class GamePlayActivity: AppCompatActivity(){
     private lateinit var timeDisplay: TextView
 
     // TIME ELEMENTS
-    private lateinit var mHandler: Handler
+    private lateinit var tHandler: Handler
+    private lateinit var gHandler: Handler
 
     // WATCH TIME CLASS
     private lateinit var watchTime: GameWatch
@@ -74,19 +75,20 @@ class GamePlayActivity: AppCompatActivity(){
         watchTime = GameWatch()
 
         // TASK 5:  INSTANTIATE A HANDLER TO RUN ON THE UI THREAD
-        mHandler = Handler()
-        displayBalloons()
+        tHandler = Handler()
+        gHandler = Handler()
 
-        // TASK: 6 START THE TIMER
-        // TODO: change the timer to seconds add thread to stop game if level time reached
-        //startTimer()
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Timer Begins").setSingleChoiceItems(
                 gameOptions,
                 0
         ) { dialog, which ->
-            startTimer()
             dialog.dismiss()
+            displayBalloons()
+            // TASK: 6 START THE TIMER
+            // TODO: change the timer to seconds add thread to stop game if level time reached
+            startTimer()
         }
 
         // TASK 3: SHOW THE DIALOG
@@ -111,15 +113,17 @@ class GamePlayActivity: AppCompatActivity(){
 
     // METHOD TO DISPLAY BALLOON GRID IN ANOTHER THREAD
     private fun displayBalloons() {
-        mHandler.postDelayed(displayBalloonsRunnable,  0)
+        gHandler.postDelayed(displayBalloonsRunnable,  0)
     }
 
     // METHOD START THE TIMER
     private fun startTimer()
     {
+        // TASK 1: SET TIME
+        watchTime.setStartTime(SystemClock.uptimeMillis())
+
         // TASK 2: SET THE START TIME AND CALL THE CUSTOM HANDLER
-        watchTime.setStartTime(SystemClock.elapsedRealtime())
-        mHandler.postDelayed(updateTimerRunnable,  0)
+        tHandler.postDelayed(updateTimerRunnable,  20)
 
     }
 
@@ -128,6 +132,7 @@ class GamePlayActivity: AppCompatActivity(){
         override fun run() {
 
             // TASK 1: COMPUTE THE TIME DIFFERENCE
+            watchTime.setTimeUpdate(SystemClock.elapsedRealtime())
             val time = (watchTime.getTimeUpdate() / 1000)
 
             // TASK 2: COMPUTE SECONDS
@@ -136,18 +141,19 @@ class GamePlayActivity: AppCompatActivity(){
             // TASK 3: DISPLAY THE TIME IN THE TIMERVIEW
             timeDisplay.text = String.format("%02d", seconds)
 
-            // TASK 4: SPECIFY NO TIME LAPSE BETWEEN POSTING
-            mHandler.postDelayed(this, 5)
-
             // TASK 4: CHECK THE LEVEL TIME HITS
             // LEVEL TIME GOTO NEXT LEVEL
             // OR RESTART LEVEL
             // TODO: TIMER LEVEL OPTIONS
-            when (seconds){
+            when (seconds) {
                 60L -> {
                     // TODO: create intent, fragment, or  animation to prompt players time ran out start next level
+                    level = 2
+                    displayBalloons()
+
                 }
             }
+            tHandler.postDelayed(this, 0)
         }
     }
 
@@ -156,6 +162,7 @@ class GamePlayActivity: AppCompatActivity(){
     private val displayBalloonsRunnable: Runnable = object: Runnable {
         override fun run() {
 
+            //TODO: fix bug with equations having same answer
             // TASK 1: Display balloons grid
             gridView = findViewById(R.id.gridview)
             db = DbContextHelperClass(applicationContext)
@@ -193,7 +200,7 @@ class GamePlayActivity: AppCompatActivity(){
                             //TODO: Touch event gesture class to do animations
 
                             // restart thread
-                            mHandler.postDelayed(this,  0)
+                            gHandler.postDelayed(this,  0)
                         } else {
                             //incorrect
                             answerTxt.text = "= ?"

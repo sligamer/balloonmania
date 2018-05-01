@@ -16,7 +16,7 @@ import java.util.ArrayList
  * Created by Justin Freres on 4/10/2018.
  * Final Project Balloon Mania
  * ImageAdapter for rendering balloons in a gridview
- * Plugin Support with kotlin_version = '1.2.31'
+ * Plugin Support with kotlin_version = '1.2.40'
  */
 
 class ImageAdapter(private val mContext: Context, private var questions: ArrayList<QuestionClass>?) : BaseAdapter() {

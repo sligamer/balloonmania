@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Balloon Mania</string>
+    <string name="select_level">Select a level</string>
+    <string name="lvl_3">Hard</string>
+    <string name="lvl_2">Medium</string>
+    <string name="lvl_1">Easy</string>
+    <string name="exit_game">Exit Game</string>
+    <string name="action_settings">Settings</string>
 </resources>

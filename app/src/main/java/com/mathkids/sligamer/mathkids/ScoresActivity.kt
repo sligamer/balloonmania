@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
  * Created by Justin Freres on 4/10/2018.
  * Final Project Balloon Mania
  * Keep Track of User Score
- * Plugin Support with kotlin_version = '1.2.31'
+ * Plugin Support with kotlin_version = '1.2.40'
  */
 class ScoresActivity: AppCompatActivity() {
 

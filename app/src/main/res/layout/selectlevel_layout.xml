@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent" android:id="@+id/selectLvL">
+
+
+    <ImageButton
+            android:id="@+id/btnLvL1"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/lvl_1"
+            android:layout_marginBottom="24dp" app:layout_constraintBottom_toTopOf="@+id/btnLvL2"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="129dp"
+            android:layout_marginEnd="128dp" app:layout_constraintEnd_toEndOf="parent"
+            android:background="@mipmap/buttonlevel1" app:layout_constraintHorizontal_bias="0.491"/>
+
+    <ImageButton
+            android:id="@+id/btnLvL2"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/lvl_2"
+            android:layout_marginBottom="20dp" app:layout_constraintBottom_toTopOf="@+id/btnLvL3"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="129dp"
+            android:layout_marginEnd="128dp" app:layout_constraintEnd_toEndOf="parent"
+            android:background="@mipmap/buttonlevel2" app:layout_constraintHorizontal_bias="0.491"/>
+
+    <ImageButton
+            android:id="@+id/btnLvL3"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/lvl_3"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="129dp" android:layout_marginEnd="128dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="148dp" android:background="@mipmap/buttonlevel3"
+            app:layout_constraintHorizontal_bias="0.491"/>
+
+</android.support.constraint.ConstraintLayout>

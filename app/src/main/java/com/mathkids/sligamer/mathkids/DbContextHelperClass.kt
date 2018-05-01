@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
  * Final Project Balloon Mania
  * SQLLiteOpenHelper class to create a database of
  * random math problems
- * Plugin Support with kotlin_version = '1.2.31'
+ * Plugin Support with kotlin_version = '1.2.40'
  */
 class DbContextHelperClass: SQLiteOpenHelper {
 
@@ -23,7 +23,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
     companion object {
 
         // DB AND TABLE
-        const val DATABASE_VERSION: Int = 8
+        const val DATABASE_VERSION: Int = 12
         const val DATABASE_NAME: String = "math_DB"
         const val DATABASE_TABLE: String = "math_Questions"
 
@@ -45,9 +45,9 @@ class DbContextHelperClass: SQLiteOpenHelper {
     private val ADD_OPERATOR = 0
     private val SUBTRACT_OPERATOR = 1
     private val MULTIPLY_OPERATOR = 2
-/*    private val DIVIDE_OPERATOR = 3*/ //TODO: fix bug with divide operator
+    private val DIVIDE_OPERATOR = 3 //TODO: fix bug with divide operator
     private val levelNames = arrayOf("Easy", "Medium", "Hard")
-    private val operators = arrayOf("+", "-", "x") //TODO: fix , "/"
+    private val operators = arrayOf("+", "-", "x", "/") //TODO: fix , "/"
     private val easyLevel = arrayOf(intArrayOf(1, 11, 21), intArrayOf(1, 5, 10), intArrayOf(2, 5, 10), intArrayOf(2, 3, 5))
     private val hardLevel = arrayOf(intArrayOf(10, 25, 50), intArrayOf(10, 20, 30), intArrayOf(5, 10, 15), intArrayOf(10, 50, 100))
     private var questionCount: Int = 0
@@ -70,12 +70,17 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
         db!!.execSQL(sqlInsertStatement)
 
+        // CREATE AN INDEX TO INCREASE PERFORMANCE
+        db!!.execSQL("create unique index math_Questions__id_uindex\n" +
+                "  on math_Questions (\"_id\");")
+
         questionCount = 0
 
         val questions = ArrayList<QuestionClass>()
 
+        // TODO: Validate increasing question count 1000 per round performance is good
         for( level in levelNames) {
-            for (i in 0..100) {
+            for (i in 0..1000) {
                 val passedLevel = levelNames.indexOf(level)
                 val q = questionGenerator(passedLevel)
                 questions.add(q)
@@ -123,10 +128,10 @@ class DbContextHelperClass: SQLiteOpenHelper {
                 operand2 = getOperand(level)
             }
             // TODO: fix the divide by zero errors
-           /* DIVIDE_OPERATOR -> while (((operand1 / operand2) % 1 > 0) || (operand1 == operand2)) {
-                operand1 = getOperand()
-                operand2 = getOperand()
-            }*/
+            DIVIDE_OPERATOR -> while (((operand1 / operand2) % 1 > 0)) {
+                operand1 = getOperand(level)
+                operand2 = getOperand(level)
+            }
         }
 
         when (operator) {
@@ -141,11 +146,11 @@ class DbContextHelperClass: SQLiteOpenHelper {
             MULTIPLY_OPERATOR -> {
                 answer = operand1 * operand2
             }
-
             // TODO: fix the divide by zero errors
-           /* DIVIDE_OPERATOR -> {
+            // TODO: expand divide answers to 3 decimal rounded
+            DIVIDE_OPERATOR -> {
                 answer = operand1 / operand2
-            }*/
+            }
 
         }
 
