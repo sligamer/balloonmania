@@ -19,8 +19,10 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.view.ViewTreeObserver
 import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
+import android.widget.ImageView
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -43,6 +45,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     var LONG_DURATION: Long = 500
     private val sDurationScale = 1f
     private lateinit var startGameBtn: Button
+    private lateinit var redBalloon: ImageView
+    private lateinit var blueBalloon: ImageView
+    private lateinit var greenBalloon: ImageView
+
+    private lateinit var balloonAnimation: AnimationDrawable
     private lateinit var db: DbContextHelperClass
 
 
@@ -56,9 +63,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         //mContainer = findViewById(R.id.container)
         //mStarter.setOnTouchListener(funButtonListener)
         //mStarter.animate().duration = 100
+/*        redBalloon = findViewById(R.id.imageViewRed)
+        redBalloon.setBackgroundResource(R.drawable.red_balloon_animation)
+        balloonAnimation = redBalloon.background as AnimationDrawable
+        balloonAnimation.start()*/
 
-        //startGameBtn = findViewById(R.id.startGameBtn)
-        //startGameBtn.setOnClickListener(this)
+     /*   blueBalloon = findViewById(R.id.imageViewBlue)
+        blueBalloon.setBackgroundResource(R.drawable.blue_balloon_animation)
+        balloonAnimation = blueBalloon.background as AnimationDrawable
+        balloonAnimation.start()
+
+        greenBalloon = findViewById(R.id.imageViewGreen)
+        greenBalloon.setBackgroundResource(R.drawable.green_balloon_animation)
+        balloonAnimation = greenBalloon.background as AnimationDrawable
+        balloonAnimation.start()*/
+
+        startGameBtn = findViewById(R.id.startGameBtn)
+        startGameBtn.setOnClickListener(this)
 
         // TASK 2: SETUP THE QUESTIONS DATABASE
         //TODO: do we add settings to check if database of questions does not exist.

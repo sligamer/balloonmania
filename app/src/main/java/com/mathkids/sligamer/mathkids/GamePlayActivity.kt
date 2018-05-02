@@ -8,6 +8,8 @@ import java.lang.Integer.parseInt
 import android.os.Handler
 import android.os.SystemClock
 import android.support.v7.app.AlertDialog
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import java.util.*
@@ -18,7 +20,7 @@ import java.util.*
  * Plugin Support with kotlin_version = '1.2.40'
  */
 
-class GamePlayActivity: AppCompatActivity(){
+class GamePlayActivity: AppCompatActivity() {
 
     private lateinit var db: DbContextHelperClass
     private lateinit var question: TextView
