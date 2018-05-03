@@ -7,9 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.view.animation.LinearInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
 import android.view.ViewGroup
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -20,9 +17,12 @@ import android.animation.PropertyValuesHolder
 import android.view.ViewTreeObserver
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
+import android.os.Handler
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
+import android.view.animation.*
 import android.widget.ImageView
+import java.util.*
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -48,8 +48,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     private lateinit var redBalloon: ImageView
     private lateinit var blueBalloon: ImageView
     private lateinit var greenBalloon: ImageView
+    private lateinit var animation : TranslateAnimation
 
     private lateinit var balloonAnimation: AnimationDrawable
+    private lateinit var animationHandler: Handler
+    private lateinit var databaseHandler: Handler
     private lateinit var db: DbContextHelperClass
 
 
@@ -59,47 +62,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         // TASK 1: SET LAYOUTS AND UI ELEMENTS
         setContentView(R.layout.activity_main) //TODO: add main drawables for this main activity splash screen
 
-        //mStarter = findViewById<Button>(R.id.startGameBtn)
-        //mContainer = findViewById(R.id.container)
-        //mStarter.setOnTouchListener(funButtonListener)
-        //mStarter.animate().duration = 100
-/*        redBalloon = findViewById(R.id.imageViewRed)
-        redBalloon.setBackgroundResource(R.drawable.red_balloon_animation)
-        balloonAnimation = redBalloon.background as AnimationDrawable
-        balloonAnimation.start()*/
+        // START RUNNABLES
+        animationHandler = Handler()
+        animationHandler.postDelayed(animateBalloonsRunnable,  50)
 
-     /*   blueBalloon = findViewById(R.id.imageViewBlue)
-        blueBalloon.setBackgroundResource(R.drawable.blue_balloon_animation)
-        balloonAnimation = blueBalloon.background as AnimationDrawable
-        balloonAnimation.start()
-
-        greenBalloon = findViewById(R.id.imageViewGreen)
-        greenBalloon.setBackgroundResource(R.drawable.green_balloon_animation)
-        balloonAnimation = greenBalloon.background as AnimationDrawable
-        balloonAnimation.start()*/
+        // TASK 2: SETUP THE QUESTIONS DATABASE
+        databaseHandler = Handler()
+        databaseHandler.postDelayed(setupDatabaseRunnable,  0)
 
         startGameBtn = findViewById(R.id.startGameBtn)
         startGameBtn.setOnClickListener(this)
 
-        // TASK 2: SETUP THE QUESTIONS DATABASE
-        //TODO: do we add settings to check if database of questions does not exist.
-        // Allow for a settings screen to create db and new randomized questions
-        // TODO move this database constructor to another activity perhaps in thread handler as well
-        db = DbContextHelperClass(this)
+
 }
 
     override fun onResume() {
         super.onResume()
-//        mContainer!!.scaleX = 1F
-//        mContainer!!.scaleY = 1F
-//        mContainer!!.alpha = 1F
-//        mStarter.visibility = View.INVISIBLE
-//        mContainer!!.viewTreeObserver.addOnPreDrawListener(mOnPreDrawListener)
     }
 
     override fun onPause() {
         super.onPause()
-        //mStarter.removeCallbacks(mSquishRunnable)
     }
 
 
@@ -109,6 +91,59 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         //start instructions activity
         val playIntent = Intent(this, SelectLevelActivity().javaClass)
         this.startActivity(playIntent)
+    }
+
+    // THREAD HANDLER FOR UPDATING BALLOON GRIDVIEW
+    private val setupDatabaseRunnable: Runnable = object: Runnable {
+        override fun run() {
+            //TODO: do we add settings to check if database of questions does not exist.
+            // Allow for a settings screen to create db and new randomized questions
+            // TODO move this database constructor to another activity perhaps in thread handler as well
+            db = DbContextHelperClass(applicationContext)
+        }
+    }
+
+    private val animateBalloonsRunnable: Runnable = object: Runnable {
+        override fun run() {
+            redBalloon = findViewById(R.id.imageViewRed)
+            redBalloon.setBackgroundResource(R.drawable.red_balloon_animation)
+            /*        balloonAnimation = redBalloon.background as AnimationDrawable
+                 balloonAnimation.start()*/
+
+            blueBalloon = findViewById(R.id.imageViewBlue)
+            blueBalloon.setBackgroundResource(R.drawable.blue_balloon_animation)
+            /*           balloonAnimation = blueBalloon.background as AnimationDrawable
+                     balloonAnimation.start()*/
+
+            greenBalloon = findViewById(R.id.imageViewGreen)
+            greenBalloon.setBackgroundResource(R.drawable.green_balloon_animation)
+            balloonAnimation = greenBalloon.background as AnimationDrawable
+            balloonAnimation.start()
+
+            /*  // Load the animation like this
+              var animSlide = AnimationUtils.loadAnimation(applicationContext,
+                      R.anim.floating_balloons)
+
+              // Start the animation like this
+              redBalloon.startAnimation(animSlide)*/
+
+
+            animation = TranslateAnimation(50.0f, 100.0f,0.0f, 100.0f)
+            animation.duration = 5000
+            animation.repeatCount = 10
+            animation.repeatMode = 2
+            animation.fillAfter = true
+            blueBalloon.startAnimation(animation)
+
+
+            animation = TranslateAnimation(0.0f, 100.0f,0.0f, 100.0f)
+            animation.duration = 5000
+            animation.repeatCount = 10
+            animation.repeatMode = 2
+            animation.fillAfter = true
+            redBalloon.startAnimation(animation)
+
+        }
     }
 
 

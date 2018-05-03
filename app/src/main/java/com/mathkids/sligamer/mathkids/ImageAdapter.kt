@@ -10,6 +10,9 @@ import android.widget.ImageView
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.Paint.Align
 import android.graphics.drawable.Drawable
+import android.media.Image
+import android.util.Log
+import android.widget.GridView
 import java.util.ArrayList
 
 /**
@@ -40,19 +43,31 @@ class ImageAdapter(private val mContext: Context, private var questions: ArrayLi
             imageView = ImageView(mContext)
             imageView.id = questions!![position].questionID
             imageView.tag = questions!![position].questionAnswer
-            imageView.layoutParams = ViewGroup.LayoutParams(200, 200)
+
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
             imageView.setPadding(5, 5, 5, 5)
+
+            when(count)
+            {
+                9 -> {
+                    imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
+                }
+                12 -> {
+                    imageView.layoutParams = ViewGroup.LayoutParams(300, 300)
+                }
+                18 -> {
+                    imageView.layoutParams = ViewGroup.LayoutParams(200, 200)
+                }
+            }
 
 
         } else {
             imageView = convertView as ImageView
         }
-
-        imageView.setImageResource(questions!![position].questionAnswer.toInt())
+        var answerInfo = questions!![position].questionAnswer.toInt()
+        imageView.setImageResource(answerInfo)
         // SET THE OVERLAY ON THE BALLOONS
         imageView.setImageDrawable(writeTextOnDrawable(questions!![position].ballonImageId, questions!![position].questionAnswer))
-
         return imageView
     }
 
@@ -60,17 +75,24 @@ class ImageAdapter(private val mContext: Context, private var questions: ArrayLi
     //https://stackoverflow.com/questions/6691818/combine-image-and-text-to-drawable
     fun writeTextOnDrawable(drawableId: Int, text: String): Drawable {
         val bm = BitmapFactory.decodeResource(mContext.resources, drawableId).copy(Bitmap.Config.ARGB_8888, true)
-        val tf = Typeface.create("Helvetica", Typeface.BOLD)
-        val paint = Paint()
-        paint.style = Paint.Style.FILL
-        paint.color = Color.BLUE
-        paint.typeface = tf
-        paint.textAlign = Align.CENTER
-        paint.textSize = 50f
-        val textRect = Rect()
-        paint.getTextBounds(text, 0, text.length, textRect)
-        val canvas = Canvas(bm)
-        canvas.drawText(text, 85f, 65f, paint)
+        try {
+            val tf = Typeface.create("Helvetica", Typeface.BOLD)
+            val paint = Paint()
+            paint.style = Paint.Style.FILL
+            paint.color = Color.BLUE
+            paint.typeface = tf
+            paint.textAlign = Align.CENTER
+            paint.textSize = 50f
+            val textRect = Rect()
+            paint.getTextBounds(text, 0, text.length, textRect)
+            val canvas = Canvas(bm)
+            canvas.drawText(text, 85f, 65f, paint)
+        }
+        catch(e: Exception)
+        {
+            Log.d("Error Painting image", e.message)
+        }
+
         return BitmapDrawable(mContext.resources, bm)
     }
 }

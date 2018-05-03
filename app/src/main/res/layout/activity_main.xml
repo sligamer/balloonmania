@@ -1,67 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/startactivitybackground"
-    tools:context="com.mathkids.sligamer.mathkids.MainActivity"
-    tools:layout_editor_absoluteY="81dp">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/container"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@drawable/startactivitybackground"
+                                             tools:context="com.mathkids.sligamer.mathkids.MainActivity"
+                                             tools:layout_editor_absoluteY="81dp">
 
+    <ImageView
+            android:id="@+id/imageViewRed"
+            android:layout_width="100dp"
+            android:layout_height="175dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="24dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.0" android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent" android:contentDescription="TODO"/>
+
+    <ImageView
+            android:id="@+id/imageViewBlue"
+            android:layout_width="100dp"
+            android:layout_height="175dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginRight="16dp" app:layout_constraintRight_toRightOf="parent" android:contentDescription="TODO"/>
+
+    <ImageView
+            android:id="@+id/imageViewGreen"
+            android:layout_width="100dp"
+            android:layout_height="175dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/startGameBtn"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="24dp"
+            app:layout_constraintVertical_bias="1.0" android:contentDescription="TODO"/>
     <Button
-        android:id="@+id/startGameBtn"
-        android:layout_width="297dp"
-        android:layout_height="461dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="27dp"
-        android:background="@drawable/startbutton"
-        android:text="Start Game"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewBlue" />
-
-    <ImageView
-        android:id="@+id/imageViewRed"
-        android:layout_width="93dp"
-        android:layout_height="140dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="132dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewGreen"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112"
-        app:srcCompat="@drawable/redballoon1" />
-
-    <ImageView
-        android:id="@+id/imageViewBlue"
-        android:layout_width="103dp"
-        android:layout_height="121dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/blueballoon3" />
-
-    <ImageView
-        android:id="@+id/imageViewGreen"
-        android:layout_width="140dp"
-        android:layout_height="153dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/greenballoon1"
-        tools:layout_editor_absoluteX="262dp" />
+            android:id="@+id/startGameBtn"
+            android:layout_width="150dp"
+            android:layout_height="39dp"
+            android:text="Start Game"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="24dp" app:layout_constraintVertical_bias="0.705"/>
 
 </android.support.constraint.ConstraintLayout>

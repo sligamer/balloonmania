@@ -23,7 +23,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
     companion object {
 
         // DB AND TABLE
-        const val DATABASE_VERSION: Int = 12
+        const val DATABASE_VERSION: Int = 13
         const val DATABASE_NAME: String = "math_DB"
         const val DATABASE_TABLE: String = "math_Questions"
 
@@ -47,7 +47,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
     private val MULTIPLY_OPERATOR = 2
     private val DIVIDE_OPERATOR = 3 //TODO: fix bug with divide operator
     private val levelNames = arrayOf("Easy", "Medium", "Hard")
-    private val operators = arrayOf("+", "-", "x", "/") //TODO: fix , "/"
+    private val operators = arrayOf("+", "-", "x") //TODO: fix , "/"
     private val easyLevel = arrayOf(intArrayOf(1, 11, 21), intArrayOf(1, 5, 10), intArrayOf(2, 5, 10), intArrayOf(2, 3, 5))
     private val hardLevel = arrayOf(intArrayOf(10, 25, 50), intArrayOf(10, 20, 30), intArrayOf(5, 10, 15), intArrayOf(10, 50, 100))
     private var questionCount: Int = 0
@@ -80,7 +80,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
         // TODO: Validate increasing question count 1000 per round performance is good
         for( level in levelNames) {
-            for (i in 0..1000) {
+            for (i in 0..100) {
                 val passedLevel = levelNames.indexOf(level)
                 val q = questionGenerator(passedLevel)
                 questions.add(q)
@@ -128,10 +128,10 @@ class DbContextHelperClass: SQLiteOpenHelper {
                 operand2 = getOperand(level)
             }
             // TODO: fix the divide by zero errors
-            DIVIDE_OPERATOR -> while (((operand1 / operand2) % 1 > 0)) {
+           /* DIVIDE_OPERATOR -> while (((operand1 / operand2) % 1 > 0)) {
                 operand1 = getOperand(level)
                 operand2 = getOperand(level)
-            }
+            }*/
         }
 
         when (operator) {
@@ -148,9 +148,9 @@ class DbContextHelperClass: SQLiteOpenHelper {
             }
             // TODO: fix the divide by zero errors
             // TODO: expand divide answers to 3 decimal rounded
-            DIVIDE_OPERATOR -> {
+          /*  DIVIDE_OPERATOR -> {
                 answer = operand1 / operand2
-            }
+            }*/
 
         }
 
@@ -216,7 +216,19 @@ class DbContextHelperClass: SQLiteOpenHelper {
     {
         var db =  this.readableDatabase
         var questionClassList = ArrayList<QuestionClass>()
-        val maxQuestionCount = 19
+        var maxQuestionCount = 0
+        when(level) {
+            "0" -> {
+                maxQuestionCount = 10
+            }
+            "1" -> {
+                maxQuestionCount = 13
+            }
+            "2" -> {
+                maxQuestionCount = 19
+            }
+        }
+
 
             // TODO: WORK TO OPTIMIZE THIS QUERY TO GET A BETTER RANDOM QUESTION
 /*        var cursor: Cursor = db.query(DATABASE_TABLE, arrayOf( KEY_QUESTION_ID, KEY_QUESTION_COEFFICIENT_ONE,

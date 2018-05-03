@@ -1,18 +1,17 @@
 package com.mathkids.sligamer.mathkids
 
-
-import android.os.AsyncTask.execute
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import java.lang.Integer.parseInt
 import android.os.Handler
 import android.os.SystemClock
 import android.support.v7.app.AlertDialog
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import java.util.*
+import android.util.Log
+import kotlinx.android.synthetic.main.playgame_layout.*
+
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -26,10 +25,10 @@ class GamePlayActivity: AppCompatActivity() {
     private lateinit var question: TextView
     private lateinit var answerTxt: TextView
     private lateinit var scoreTxt: TextView
+    private lateinit var levelNumber: TextView
     private lateinit var gridView: GridView
 
     private var level: Int  = 0
-    private var questionID: Int = 0
     private var answer: Int = 0
 
     // UI: ELEMENTS: BUTTON TOGGLE
@@ -38,6 +37,7 @@ class GamePlayActivity: AppCompatActivity() {
     // TIME ELEMENTS
     private lateinit var tHandler: Handler
     private lateinit var gHandler: Handler
+    private lateinit var nHandler: Handler
 
     // WATCH TIME CLASS
     private lateinit var watchTime: GameWatch
@@ -51,10 +51,16 @@ class GamePlayActivity: AppCompatActivity() {
         // TASK 1: SET THE LAYOUT AND UI ELEMENTS
         setContentView(R.layout.playgame_layout)
 
+        // Note that the Toolbar defined in the layout has the id "game_toolbar"
+        setSupportActionBar(findViewById(R.id.game_toolbar))
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+
+
         question = findViewById(R.id.question)
         answerTxt = findViewById(R.id.answer)
         scoreTxt = findViewById(R.id.score)
         timeDisplay = findViewById(R.id.timerView)
+        levelNumber = findViewById(R.id.lvlView)
 
 
         // TASK 2: SET INTENT TO PASS LEVEL SELECTION TO NEXT ACTIVITY
@@ -66,7 +72,6 @@ class GamePlayActivity: AppCompatActivity() {
                     passedLevel >= 0 ->
                         level = passedLevel
                 }
-                //questionID = getQuestion(passedLevel.toString())
             }
         }
 
@@ -79,9 +84,10 @@ class GamePlayActivity: AppCompatActivity() {
         // TASK 5:  INSTANTIATE A HANDLER TO RUN ON THE UI THREAD
         tHandler = Handler()
         gHandler = Handler()
+        nHandler = Handler()
 
 
-        val builder = AlertDialog.Builder(this)
+/*        val builder = AlertDialog.Builder(this)
         builder.setTitle("Timer Begins").setSingleChoiceItems(
                 gameOptions,
                 0
@@ -95,7 +101,10 @@ class GamePlayActivity: AppCompatActivity() {
 
         // TASK 3: SHOW THE DIALOG
         val ad = builder.create()
-        ad.show()
+        ad.show()*/
+
+        displayBalloons()
+        startTimer()
     }
 
 
@@ -113,6 +122,10 @@ class GamePlayActivity: AppCompatActivity() {
         return Integer.parseInt(scoreStr.substring(scoreStr.lastIndexOf(" ") + 1))
     }
 
+    private fun getLevel(): Int {
+        return level
+    }
+
     // METHOD TO DISPLAY BALLOON GRID IN ANOTHER THREAD
     private fun displayBalloons() {
         gHandler.postDelayed(displayBalloonsRunnable,  0)
@@ -125,7 +138,7 @@ class GamePlayActivity: AppCompatActivity() {
         watchTime.setStartTime(SystemClock.uptimeMillis())
 
         // TASK 2: SET THE START TIME AND CALL THE CUSTOM HANDLER
-        tHandler.postDelayed(updateTimerRunnable,  20)
+        tHandler.postDelayed(updateTimerRunnable,  0)
 
     }
 
@@ -147,22 +160,37 @@ class GamePlayActivity: AppCompatActivity() {
             // LEVEL TIME GOTO NEXT LEVEL
             // OR RESTART LEVEL
             // TODO: TIMER LEVEL OPTIONS
-            when (seconds) {
-                60L -> {
-                    // TODO: create intent, fragment, or  animation to prompt players time ran out start next level
-                    level = 2
-                    displayBalloons()
+            var currentscore: Int = getScore()
 
-                }
+            if(currentscore >= 2 && level == 0)
+            {
+                // start level 2
+                level = 1
+                nHandler.post(notificationRunnable)
             }
-            tHandler.postDelayed(this, 0)
+            if(currentscore >= 3 && level == 1)
+            {
+                // start level 3
+                level = 2
+                nHandler.post(notificationRunnable)
+            }
+            if(currentscore >= 30 && level == 2)
+            {
+                // show game won when reach 50
+                nHandler.post(notificationRunnable)
+            }
+            tHandler.post(this)
         }
+
     }
 
 
     // THREAD HANDLER FOR UPDATING BALLOON GRIDVIEW
     private val displayBalloonsRunnable: Runnable = object: Runnable {
         override fun run() {
+
+            // set level
+            levelNumber.text = getLevel().toString()
 
             //TODO: fix bug with equations having same answer
             // TASK 1: Display balloons grid
@@ -174,6 +202,9 @@ class GamePlayActivity: AppCompatActivity() {
             question.text = questions!![randomQuestion].questionProblem
             answer = questions!![randomQuestion].questionAnswer.toInt()
 
+            // gridview height
+            val gVH = gridView.height
+            val gVW = gridView.width
             var madapter = ImageAdapter(applicationContext, questions)
             gridView.adapter = madapter
 
@@ -202,7 +233,7 @@ class GamePlayActivity: AppCompatActivity() {
                             //TODO: Touch event gesture class to do animations
 
                             // restart thread
-                            gHandler.postDelayed(this,  0)
+                            gHandler.postDelayed(this, 5)
                         } else {
                             //incorrect
                             answerTxt.text = "= ?"
@@ -216,7 +247,33 @@ class GamePlayActivity: AppCompatActivity() {
                     answerTxt.text = enteredNum.toString()
                 }
             }
+
+            gridView.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                Log.d("Action", "onLayoutChange(): ")
+
+            }
         }
+    }
+
+    private val notificationRunnable: Runnable = object: Runnable {
+        override fun run() {
+
+            when(level) {
+                0 -> {
+                    Toast.makeText(applicationContext, "Well done starting level 2...", Toast.LENGTH_LONG )
+
+                }
+                1 -> {
+                    Toast.makeText(applicationContext, "Well done starting level 2...", Toast.LENGTH_LONG )
+
+                }
+                3 -> {
+                    Toast.makeText(applicationContext, "Well done starting level 2...", Toast.LENGTH_LONG )
+
+                }
+            }
+        }
+
     }
 }
 
