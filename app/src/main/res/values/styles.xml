@@ -1,26 +1,11 @@
 <resources>
-    <style name="BaseAppTheme" parent="android:Theme.Material">
-        <!-- enable window content transitions -->
-        <item name="android:windowActivityTransitions">true</item>
 
-        <!-- specify enter and exit transitions -->
-        <item name="android:windowEnterTransition">@transition/explode</item>
-        <item name="android:windowExitTransition">@transition/explode</item>
-
-        <!-- specify shared element transitions -->
-        <item name="android:windowSharedElementEnterTransition">
-            @transition/change_image_transform</item>
-        <item name="android:windowSharedElementExitTransition">
-            @transition/change_image_transform</item>
-    </style>
     <!-- Base application theme. -->
-    <style name="CustomActionBarStyle" parent="android:style/Widget.Holo.ActionBar">
-        <item name="android:titleTextStyle">@style/NoTitleText</item>
-        <item name="android:subtitleTextStyle">@style/NoTitleText</item>
+    <style name="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="NoTitleText">
-        <item name="android:textSize">0sp</item>
-        <item name="android:textColor">#00000000</item>
-    </style>
 </resources>

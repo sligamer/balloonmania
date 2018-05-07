@@ -7,7 +7,7 @@ import java.util.ArrayList
  * Created by Justin Freres on 4/10/2018.
  * Final Project Balloon Mania
  * Question class for getting questions using an object QuestionClass
- * Plugin Support with kotlin_version = '1.2.40'
+ * Plugin Support with kotlin_version = '1.2.41'
  */
 class QuestionClass {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/greenballoon1" android:duration="300"></item>
-    <item android:drawable="@drawable/greenballoon2" android:duration="300"></item>
-    <item android:drawable="@drawable/greenballoon3" android:duration="300"></item>
+    <item android:drawable="@drawable/splashballoon1" android:duration="300"></item>
+    <item android:drawable="@drawable/splashballoon2" android:duration="300"></item>
+    <item android:drawable="@drawable/splashballoon3" android:duration="300"></item>
 </animation-list>

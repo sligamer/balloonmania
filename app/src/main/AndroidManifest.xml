@@ -5,13 +5,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/Theme.AppCompat.Light"
             android:allowBackup="true"
-            android:hardwareAccelerated="false"
+            android:hardwareAccelerated="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:largeHeap="true"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@drawable/balloons"
             android:supportsRtl="true">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -22,11 +22,9 @@
         </activity>
 
         <!-- Additional Activity Screens -->
-        <activity android:name=".GamePlayActivity">
+        <activity android:name=".GamePlayActivity" android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
         <activity android:name=".SelectLevelActivity">
-        </activity>
-        <activity android:name=".ScoresActivity">
         </activity>
         
     </application>

@@ -1,9 +1,12 @@
 package com.mathkids.sligamer.mathkids
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
+
+
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -11,7 +14,7 @@ import android.support.v7.app.AppCompatActivity
  * Select Level Screen
  * Plugin Support with kotlin_version = '1.2.40'
  */
-class SelectLevelActivity: AppCompatActivity() {
+class SelectLevelActivity: Activity() {
 
     // DECLARE VARIABLES
     private val levelNames = arrayOf("Easy", "Medium", "Hard")
@@ -20,17 +23,17 @@ class SelectLevelActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // TASK 1: CREATE LAYOUT AND UI ELEMENTS
-        setContentView(R.layout.instructions_layout)
 
         // TASK 2: BUILD ALERT DIALOG TO DISPLAY AVAILABLE OPTIONS
-        // TODO: may turn this into a fragment?
+        val inflater = LayoutInflater.from(this@SelectLevelActivity)
+        val customDialog = inflater.inflate(R.layout.instructions_layout, null)
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Choose a level")
                 .setSingleChoiceItems(levelNames, 0) { dialog, which ->
                     dialog.dismiss()
                     startPlay(which)
-                }
+                }.setView(customDialog)
 
         // TASK 3: SHOW THE DIALOG
         val ad = builder.create()
@@ -42,5 +45,12 @@ class SelectLevelActivity: AppCompatActivity() {
         val playIntent = Intent(this, GamePlayActivity().javaClass)
         playIntent.putExtra("level", chosenLevel)
         this.startActivity(playIntent)
+    }
+
+    override fun onBackPressed() {
+        val homeIntent = Intent(Intent.ACTION_MAIN)
+        homeIntent.addCategory(Intent.CATEGORY_HOME)
+        homeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(homeIntent)
     }
 }

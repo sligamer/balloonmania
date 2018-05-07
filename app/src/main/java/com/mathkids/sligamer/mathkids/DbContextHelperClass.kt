@@ -11,10 +11,10 @@ import kotlin.collections.ArrayList
 
 /**
  * Created by Justin Freres on 4/10/2018.
- * Final Project Balloon Mania
+ * Final Project Balloon Math Mania
  * SQLLiteOpenHelper class to create a database of
  * random math problems
- * Plugin Support with kotlin_version = '1.2.40'
+ * Plugin Support with kotlin_version = '1.2.41'
  */
 class DbContextHelperClass: SQLiteOpenHelper {
 
@@ -23,7 +23,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
     companion object {
 
         // DB AND TABLE
-        const val DATABASE_VERSION: Int = 13
+        const val DATABASE_VERSION: Int = 14
         const val DATABASE_NAME: String = "math_DB"
         const val DATABASE_TABLE: String = "math_Questions"
 
@@ -78,7 +78,6 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
         val questions = ArrayList<QuestionClass>()
 
-        // TODO: Validate increasing question count 1000 per round performance is good
         for( level in levelNames) {
             for (i in 0..100) {
                 val passedLevel = levelNames.indexOf(level)
@@ -177,12 +176,6 @@ class DbContextHelperClass: SQLiteOpenHelper {
         var db =  this.readableDatabase
         var questionClass: QuestionClass? = null
 
-        // TODO: WORK TO OPTIMIZE THIS QUERY TO GET A BETTER RANDOM QUESTION
-/*        var cursor: Cursor = db.query(DATABASE_TABLE, arrayOf( KEY_QUESTION_ID, KEY_QUESTION_COEFFICIENT_ONE,
-                KEY_QUESTION_OPERATOR, KEY_QUESTION_COEFFICIENT_TW0, KEY_QUESTION_ANSWER, KEY_QUESTION_LEVEL),
-                "$KEY_QUESTION_LEVEL=?", arrayOf("$level"), "$KEY_QUESTION_LEVEL=$level",
-                "$KEY_QUESTION_LEVEL=$level", "Random()", "1")*/
-
         var cursor: Cursor? = null
 
         cursor = when {
@@ -228,13 +221,6 @@ class DbContextHelperClass: SQLiteOpenHelper {
                 maxQuestionCount = 19
             }
         }
-
-
-            // TODO: WORK TO OPTIMIZE THIS QUERY TO GET A BETTER RANDOM QUESTION
-/*        var cursor: Cursor = db.query(DATABASE_TABLE, arrayOf( KEY_QUESTION_ID, KEY_QUESTION_COEFFICIENT_ONE,
-                KEY_QUESTION_OPERATOR, KEY_QUESTION_COEFFICIENT_TW0, KEY_QUESTION_ANSWER, KEY_QUESTION_LEVEL),
-                "$KEY_QUESTION_LEVEL=?", arrayOf("$level"), "$KEY_QUESTION_LEVEL=$level",
-                "$KEY_QUESTION_LEVEL=$level", "Random()", "1")*/
 
         var cursor: Cursor?
 
