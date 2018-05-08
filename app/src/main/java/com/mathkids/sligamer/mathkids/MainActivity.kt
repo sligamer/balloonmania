@@ -40,13 +40,15 @@ class MainActivity : Activity(), View.OnClickListener{
         setContentView(R.layout.activity_main)
 
         // START UI THREADS
-        startAnimationFromBackgroundThread()
+        startAnimationFromBackgroundThread1()
+        startAnimationFromBackgroundThread2()
+        startAnimationFromBackgroundThread3()
 
         startGameBtn = findViewById(R.id.startGameBtn)
         startGameBtn.setOnClickListener(this)
     }
 
-    private fun startAnimationFromBackgroundThread() {
+    private fun startAnimationFromBackgroundThread1() {
         val executorService = Executors.newSingleThreadExecutor()
         executorService.submit({
             // this runs on a background thread
@@ -56,8 +58,47 @@ class MainActivity : Activity(), View.OnClickListener{
                 blueBalloon = findViewById(R.id.imageViewBlue)
                 blueBalloon.setBackgroundResource(R.drawable.blue_balloon_animation)
 
+                animation = TranslateAnimation(50.0f, 100.0f, 10.0f, 150.0f)
+                animation.duration = 5000
+                animation.repeatCount = 100
+                animation.repeatMode = 2
+                animation.fillAfter = true
+                blueBalloon.startAnimation(animation)
+
+            }
+        })
+    }
+
+    private fun startAnimationFromBackgroundThread2() {
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.submit({
+            // this runs on a background thread
+            //Log.v("AnimateBalloons", "Worker thread id:" + Thread.currentThread().id)
+            this@MainActivity.runOnUiThread {
+                //Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
+
                 redBalloon = findViewById(R.id.imageViewRed)
                 redBalloon.setBackgroundResource(R.drawable.red_balloon_animation)
+
+                animation = TranslateAnimation(0.0f, 80.0f, 0.0f, 150.0f)
+                animation.duration = 5000
+                animation.repeatCount = 100
+                animation.repeatMode = 2
+                animation.fillAfter = true
+                redBalloon.startAnimation(animation)
+
+
+            }
+        })
+    }
+
+    private fun startAnimationFromBackgroundThread3() {
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.submit({
+            // this runs on a background thread
+            //Log.v("AnimateBalloons", "Worker thread id:" + Thread.currentThread().id)
+            this@MainActivity.runOnUiThread {
+                //Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
 
                 greenBalloon = findViewById(R.id.imageViewGreen)
                 greenBalloon.setBackgroundResource(R.drawable.green_balloon_animation)
@@ -69,28 +110,13 @@ class MainActivity : Activity(), View.OnClickListener{
                 animation.fillAfter = true
                 greenBalloon.startAnimation(animation)
 
-                animation = TranslateAnimation(50.0f, 100.0f, 10.0f, 150.0f)
-                animation.duration = 5000
-                animation.repeatCount = 100
-                animation.repeatMode = 2
-                animation.fillAfter = true
-                blueBalloon.startAnimation(animation)
-
-
-                animation = TranslateAnimation(0.0f, 80.0f, 0.0f, 150.0f)
-                animation.duration = 5000
-                animation.repeatCount = 100
-                animation.repeatMode = 2
-                animation.fillAfter = true
-                redBalloon.startAnimation(animation)
 
                 val balloonAnimation = greenBalloon.background as AnimationDrawable
                 balloonAnimation.start()
-
-
             }
         })
     }
+
     // ONCLICK EVENT IF CLICK SEND INTENT TO LEVEL SELECTION MENU
     override fun onClick(v: View) {
         Thread(Runnable {

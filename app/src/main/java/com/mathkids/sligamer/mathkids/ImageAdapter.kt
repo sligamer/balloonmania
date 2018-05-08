@@ -28,7 +28,9 @@ class ImageAdapter(private val mContext: Context, private var questions: ArrayLi
         return  questions!![position].questionAnswer
     }
 
-    override fun getItemId(position: Int): Long = 0L
+    override fun getItemId(position: Int): Long {
+        return  position.toLong()
+    }
 
     // create a new ImageView for each item referenced by the Adapter
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

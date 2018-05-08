@@ -13,15 +13,19 @@ import android.os.CountDownTimer
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Rect
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.media.Image
+import android.transition.Explode
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.TranslateAnimation
 import java.util.concurrent.Executors
 import android.widget.TextView
-
+import kotlin.concurrent.timerTask
 
 
 /**
@@ -49,6 +53,8 @@ class GamePlayActivity: Activity(){
     // HANDLERS
     private lateinit var gHandler: Handler
     private lateinit var nHandler: Handler
+
+    private lateinit var balloonAnimation: AnimationDrawable
 
     // ONCREATE VIEW
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +101,13 @@ class GamePlayActivity: Activity(){
         scoreTxt.text = """Score: ${0}"""
         // set the answer to default
         answerTxt.text = "= ?"
+
+        val myScore = getSharedPreferences("MyScores", Context.MODE_PRIVATE)
+        val editor = myScore.edit().apply {
+        }
+        // clear
+        editor.clear()
+        editor.apply()
     }
 
     // METHOD TO GET CURRENT USER SCORE
@@ -147,12 +160,12 @@ class GamePlayActivity: Activity(){
     }
 
     // METHOD TO SAVE SHARED PREFERENCES SCORES
-    private fun saveScores(exScore: Int)
+    private fun saveScores()
     {
         val myScore = getSharedPreferences("MyScores", Context.MODE_PRIVATE)
         val editor = myScore.edit().apply {
-            putString("Level", level.toString())
-            putInt("Score", exScore)
+            putString("Level", getLevel().toString())
+            putInt("Score", getScore())
         }
         // save
         editor.apply()
@@ -173,8 +186,11 @@ class GamePlayActivity: Activity(){
             this@GamePlayActivity.runOnUiThread {
                 //Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
                 currentImage.setBackgroundResource(R.drawable.pop_balloon_animation)
-                val balloonAnimation = currentImage.background as AnimationDrawable
+                balloonAnimation = currentImage.background as AnimationDrawable
+                val time = balloonAnimation.numberOfFrames * balloonAnimation.getDuration(0)
                 balloonAnimation.start()
+                val timer = Timer()
+                timer.schedule(timerTask { balloonAnimation.stop() }, time.toLong() + 100L)
             }
         })
         executorService.shutdown()
@@ -221,21 +237,23 @@ class GamePlayActivity: Activity(){
                             scoreTxt.text = """Score: ${exScore + 1}"""
 
                             // add score to shared preferences
-                            saveScores(exScore)
+                            saveScores()
 
                             // set the answer to view
                             answerTxt.text = answer.toString()
 
                             // restart thread
-                            gHandler.postDelayed(this, 25)
+                            gHandler.postDelayed(this, 0)
 
                         } else {
                             //incorrect
+                            // enable click
                             answerTxt.text = "= ?"
                             val currentImage = madapter.getView(position, view, parent) as ImageView
-                            currentImage.setImageResource(R.mipmap.response_balloon)
+                            currentImage.setBackgroundResource(R.drawable.balloontransparent)
                             startAnimationFromBackgroundThread(currentImage)
-
+                            val timer = Timer()
+                            timer.schedule(timerTask { currentImage.setImageResource(R.mipmap.response_balloon) }, 1350)
 
                         }
                     }
