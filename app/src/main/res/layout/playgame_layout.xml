@@ -5,17 +5,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="?android:attr/windowSwipeToDismiss"
-    android:backgroundTint="@android:color/transparent"
+    android:background="@drawable/mathmaniabackground"
     tools:layout_editor_absoluteY="25dp">
 
+
+    <RelativeLayout
+        android:id="@+id/label_layout"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textViewproblemlbl"
+            android:layout_width="106dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/textViewanswerlbl"
+            android:text="@string/problem"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewanswerlbl"
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="26dp"
+            android:layout_toStartOf="@+id/textViewscorelbl"
+            android:text="@string/answer"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewscorelbl"
+            android:layout_width="99dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="89dp"
+            android:text="@string/score"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewlvllbl"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="62dp"
+            android:text="@string/level"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewtimerlbl"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/time"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginTop="16dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
         android:elevation="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/question"
@@ -64,7 +128,7 @@
 
         <TextView
             android:id="@+id/timerView"
-            android:layout_width="35dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@drawable/scorebackground"
@@ -84,6 +148,7 @@
         android:id="@+id/gridview"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:columnWidth="90dp"
         android:elevation="8dp"
         android:gravity="center"

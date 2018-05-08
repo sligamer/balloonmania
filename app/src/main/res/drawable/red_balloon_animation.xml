@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/redballoon1" android:duration="300"></item>
-    <item android:drawable="@drawable/redballoon2" android:duration="300"></item>
-    <item android:drawable="@drawable/redballoon3" android:duration="300"></item>
+    <item android:drawable="@drawable/redballoon" android:duration="300"></item>
 </animation-list>

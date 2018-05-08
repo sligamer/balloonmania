@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
  * random math problems
  * Plugin Support with kotlin_version = '1.2.41'
  */
-class DbContextHelperClass: SQLiteOpenHelper {
+class DbContextHelperClass(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     // TASK 1: DEFINE THE DATABASE AND TABLE
     // TASK 2: DEFINE THE COLUMNS IN THE TABLE
@@ -53,14 +53,10 @@ class DbContextHelperClass: SQLiteOpenHelper {
     private var questionCount: Int = 0
     private var random: Random? = null
 
-    constructor(context: Context) : super(context, DATABASE_NAME, null, DATABASE_VERSION) {
-        this.writableDatabase
-    }
-
     // CREATE DATABASE TABLE
     override fun onCreate(db: SQLiteDatabase?) {
 
-        var sqlInsertStatement = "CREATE TABLE " + DATABASE_TABLE + "(" +
+        val sqlInsertStatement = "CREATE TABLE " + DATABASE_TABLE + "(" +
                 KEY_QUESTION_ID + " integer primary key autoincrement not null, " +
                 KEY_QUESTION_COEFFICIENT_ONE + " text not null, " +
                 KEY_QUESTION_OPERATOR + " text not null, " +
@@ -71,7 +67,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
         db!!.execSQL(sqlInsertStatement)
 
         // CREATE AN INDEX TO INCREASE PERFORMANCE
-        db!!.execSQL("create unique index math_Questions__id_uindex\n" +
+        db.execSQL("create unique index math_Questions__id_uindex\n" +
                 "  on math_Questions (\"_id\");")
 
         questionCount = 0
@@ -104,7 +100,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
     // IF DATABASE DOES NOT EXIST CREATE IT AND SEED THE DATA
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
-        var sqlInsertStatement = "DROP TABLE IF EXISTS $DATABASE_TABLE"
+        val sqlInsertStatement = "DROP TABLE IF EXISTS $DATABASE_TABLE"
 
         db!!.execSQL(sqlInsertStatement)
 
@@ -173,7 +169,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
     fun getQuestion(id: Int, level: String) : QuestionClass?
     {
-        var db =  this.readableDatabase
+        val db =  this.readableDatabase
         var questionClass: QuestionClass? = null
 
         var cursor: Cursor? = null
@@ -207,8 +203,8 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
     fun getQuestions(id: Int, level: String) : ArrayList<QuestionClass>?
     {
-        var db =  this.readableDatabase
-        var questionClassList = ArrayList<QuestionClass>()
+        val db =  this.readableDatabase
+        val questionClassList = ArrayList<QuestionClass>()
         var maxQuestionCount = 0
         when(level) {
             "0" -> {
@@ -222,7 +218,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
             }
         }
 
-        var cursor: Cursor?
+        val cursor: Cursor?
 
         cursor = when {
             id > 0 -> db.rawQuery("SELECT DISTINCT * FROM $DATABASE_TABLE WHERE _id = ?",
@@ -235,7 +231,7 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
         if(cursor.moveToFirst()) {
             while (cursor.moveToNext())
-            questionClassList!!.add(QuestionClass(
+            questionClassList.add(QuestionClass(
                     cursor.getInt(cursor.getColumnIndex("_id")),
                     cursor.getString(cursor.getColumnIndex("coefficientone")),
                     cursor.getString(cursor.getColumnIndex("operator")),
@@ -250,6 +246,10 @@ class DbContextHelperClass: SQLiteOpenHelper {
 
         questionClassList.shuffle()
         return questionClassList
+    }
+
+    init {
+        this.writableDatabase
     }
 
 }

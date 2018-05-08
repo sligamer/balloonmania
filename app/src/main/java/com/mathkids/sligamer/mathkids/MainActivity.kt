@@ -50,9 +50,9 @@ class MainActivity : Activity(), View.OnClickListener{
         val executorService = Executors.newSingleThreadExecutor()
         executorService.submit({
             // this runs on a background thread
-            Log.v("AnimateBalloons", "Worker thread id:" + Thread.currentThread().id)
+            //Log.v("AnimateBalloons", "Worker thread id:" + Thread.currentThread().id)
             this@MainActivity.runOnUiThread {
-                Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
+                //Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
                 blueBalloon = findViewById(R.id.imageViewBlue)
                 blueBalloon.setBackgroundResource(R.drawable.blue_balloon_animation)
 
@@ -62,14 +62,14 @@ class MainActivity : Activity(), View.OnClickListener{
                 greenBalloon = findViewById(R.id.imageViewGreen)
                 greenBalloon.setBackgroundResource(R.drawable.green_balloon_animation)
 
-                animation = TranslateAnimation(-100.0f, 100.0f, 0.0f, 0.0f)
+                animation = TranslateAnimation(-100.0f, 80.0f, 10.0f, 65.0f)
                 animation.duration = 5000
                 animation.repeatCount = 100
                 animation.repeatMode = 2
                 animation.fillAfter = true
                 greenBalloon.startAnimation(animation)
 
-                animation = TranslateAnimation(50.0f, 100.0f, 10.0f, 400.0f)
+                animation = TranslateAnimation(50.0f, 100.0f, 10.0f, 150.0f)
                 animation.duration = 5000
                 animation.repeatCount = 100
                 animation.repeatMode = 2
@@ -77,7 +77,7 @@ class MainActivity : Activity(), View.OnClickListener{
                 blueBalloon.startAnimation(animation)
 
 
-                animation = TranslateAnimation(0.0f, 80.0f, 0.0f, 280.0f)
+                animation = TranslateAnimation(0.0f, 80.0f, 0.0f, 150.0f)
                 animation.duration = 5000
                 animation.repeatCount = 100
                 animation.repeatMode = 2

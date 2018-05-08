@@ -14,9 +14,15 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.Drawable
+import android.media.Image
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.animation.TranslateAnimation
 import java.util.concurrent.Executors
+import android.widget.TextView
+
+
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -114,7 +120,7 @@ class GamePlayActivity: Activity(){
 
             override fun onTick(millisUntilFinished: Long) {
                 timeDisplay.text = String.format("%02d", millisUntilFinished / 1000)
-                var currentscore: Int = getScore()
+                val currentscore: Int = getScore()
 
                 if(currentscore >= 10 && (millisUntilFinished / 1000) <=30 && level == 0)
                 {
@@ -163,9 +169,9 @@ class GamePlayActivity: Activity(){
         val executorService = Executors.newSingleThreadExecutor()
         executorService.submit({
             // this runs on a background thread
-            Log.v("AnimateBalloons", "Worker thread id:" + Thread.currentThread().id)
+            //Log.v("AnimateBalloons", "Worker thread id:" + Thread.currentThread().id)
             this@GamePlayActivity.runOnUiThread {
-                Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
+                //Log.v("AnimateBalloons", "Animation thread id:" + Thread.currentThread().id)
                 currentImage.setBackgroundResource(R.drawable.pop_balloon_animation)
                 val balloonAnimation = currentImage.background as AnimationDrawable
                 balloonAnimation.start()
@@ -180,6 +186,8 @@ class GamePlayActivity: Activity(){
 
             // set level
             levelNumber.text = getLevel().toString()
+            // set the answer to default
+            answerTxt.text = "= ?"
 
             //TODO: optimize refine query to not show questions with same answer
             // TASK 1: Display balloons grid
@@ -188,8 +196,8 @@ class GamePlayActivity: Activity(){
             val questions: ArrayList<QuestionClass>? = db.getQuestions(0, level.toString())
             val random = Random()
             val randomQuestion = random.nextInt(questions!!.count())
-            question.text = questions!![randomQuestion].questionProblem
-            answer = questions!![randomQuestion].questionAnswer.toInt()
+            question.text = questions[randomQuestion].questionProblem
+            answer = questions[randomQuestion].questionAnswer.toInt()
             val madapter = ImageAdapter(applicationContext, questions)
             gridView.adapter = madapter
 
@@ -215,18 +223,19 @@ class GamePlayActivity: Activity(){
                             // add score to shared preferences
                             saveScores(exScore)
 
-                            // set the answer to default
-                            answerTxt.text = "= ?"
+                            // set the answer to view
+                            answerTxt.text = answer.toString()
 
                             // restart thread
-                            gHandler.postDelayed(this, 5)
+                            gHandler.postDelayed(this, 25)
 
                         } else {
                             //incorrect
                             answerTxt.text = "= ?"
                             val currentImage = madapter.getView(position, view, parent) as ImageView
-                            startAnimationFromBackgroundThread(currentImage)
                             currentImage.setImageResource(R.mipmap.response_balloon)
+                            startAnimationFromBackgroundThread(currentImage)
+
 
                         }
                     }
@@ -243,11 +252,18 @@ class GamePlayActivity: Activity(){
 
             val builder = AlertDialog.Builder(this@GamePlayActivity)
             val results = getScores()
-            builder.setTitle("Great Try!").setMessage(results.all.toString()).setIcon(R.drawable.ic_notifications_black_24dp)
+            val inflater = LayoutInflater.from(this@GamePlayActivity)
+            val customDialog = inflater.inflate(R.layout.scoreboard_layout, null)
+            val scoreBoardImageView = customDialog.findViewWithTag("scoreBoardImageView") as ImageView
+            scoreBoardImageView.setBackgroundResource(R.drawable.clipboard)
+            val resultsView = customDialog.findViewWithTag("resultsTextView") as TextView
+            resultsView.text = results.all.toString()
+            builder.setTitle("Great Try!").setIcon(R.drawable.ic_notifications_black_24dp)
+            .setView(customDialog)
 
             // Setting Positive "Yes" Btn
             builder.setPositiveButton("Try Again",
-                    DialogInterface.OnClickListener { dialog, which ->
+                    { dialog, which ->
                         // start new game
                         val playIntent = Intent(this@GamePlayActivity, SelectLevelActivity().javaClass)
                         startActivity(playIntent)
@@ -255,7 +271,7 @@ class GamePlayActivity: Activity(){
 
             // Setting Negative "NO" Btn
             builder.setNegativeButton("Exit Game",
-                    DialogInterface.OnClickListener { dialog, which ->
+                    { dialog, which ->
                         // go to main menu
                         val playIntent = Intent(applicationContext, MainActivity().javaClass)
                         startActivity(playIntent)

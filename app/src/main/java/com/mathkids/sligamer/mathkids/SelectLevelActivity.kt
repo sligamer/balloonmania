@@ -29,11 +29,11 @@ class SelectLevelActivity: Activity() {
         val customDialog = inflater.inflate(R.layout.instructions_layout, null)
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Choose a level")
-                .setSingleChoiceItems(levelNames, 0) { dialog, which ->
-                    dialog.dismiss()
-                    startPlay(which)
-                }.setView(customDialog)
+        .setCustomTitle(customDialog)
+        .setSingleChoiceItems(levelNames, 0) { dialog, which ->
+            dialog.dismiss()
+            startPlay(which)
+        }
 
         // TASK 3: SHOW THE DIALOG
         val ad = builder.create()
