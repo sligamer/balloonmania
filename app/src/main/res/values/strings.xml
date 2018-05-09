@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">Balloon Mania</string>
     <string name="select_level">Select a level</string>
-    <string name="lvl_3">Hard</string>
-    <string name="lvl_2">Medium</string>
-    <string name="lvl_1">Easy</string>
     <string name="exit_game">Exit Game</string>
-    <string name="win_game">You Win!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_settings">Settings</string>
     <string name="how_to_play">How to Play?</string>
     <string name="pop_the_balloons">Pop The Balloons</string>
     <string name="pick_the_correct_answer_before_time_runs_out">Pick the correct answer before time runs out!</string>

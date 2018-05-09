@@ -10,7 +10,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/label_layout"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginBottom="1dp"
@@ -20,7 +19,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewproblemlbl"
             android:layout_width="106dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -50,7 +48,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textViewlvllbl"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -60,7 +57,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textViewtimerlbl"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

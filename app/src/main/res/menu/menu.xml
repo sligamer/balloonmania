@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/select_level" android:id="@+id/selectLevel"/>
-    <item android:title="@string/exit_game" android:id="@+id/exitGame"/>
+    <item android:title="@string/select_level" />
+    <item android:title="@string/exit_game" />
 </menu>

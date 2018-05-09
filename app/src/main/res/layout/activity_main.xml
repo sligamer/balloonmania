@@ -70,7 +70,6 @@
         app:layout_constraintVertical_bias="0.616" />
 
     <ImageView
-        android:id="@+id/imageViewMath"
         android:layout_width="206dp"
         android:layout_height="169dp"
         android:layout_marginBottom="8dp"
@@ -84,7 +83,6 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageViewMath2"
         android:layout_width="206dp"
         android:layout_height="169dp"
         android:layout_marginBottom="8dp"

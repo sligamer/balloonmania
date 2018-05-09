@@ -2,17 +2,15 @@ package com.mathkids.sligamer.mathkids
 
 
 import android.app.Activity
-import android.os.Bundle
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
-import android.util.Log
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import android.view.animation.TranslateAnimation
+import android.widget.Button
 import android.widget.ImageView
-import android.view.animation.AnimationUtils
 import java.util.concurrent.Executors
 
 

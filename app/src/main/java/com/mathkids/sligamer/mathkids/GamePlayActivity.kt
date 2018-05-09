@@ -1,30 +1,22 @@
 package com.mathkids.sligamer.mathkids
 
-import android.os.Bundle
-import java.lang.Integer.parseInt
-import android.os.Handler
-import android.support.v7.app.AlertDialog
-import android.widget.*
-import android.widget.AdapterView.OnItemClickListener
-import java.util.*
 import android.app.Activity
 import android.content.Context
-import android.os.CountDownTimer
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Rect
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.Drawable
-import android.media.Image
-import android.transition.Explode
-import android.transition.Transition
-import android.transition.TransitionManager
-import android.util.Log
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
-import android.view.animation.TranslateAnimation
-import java.util.concurrent.Executors
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.GridView
+import android.widget.ImageView
 import android.widget.TextView
+import java.lang.Integer.parseInt
+import java.util.*
+import java.util.concurrent.Executors
 import kotlin.concurrent.timerTask
 
 
@@ -33,7 +25,7 @@ import kotlin.concurrent.timerTask
  * Final Project Balloon Math Mania
  * Plugin Support with kotlin_version = '1.2.41'
  */
-class GamePlayActivity: Activity(){
+class GamePlayActivity : Activity() {
 
     // UI: ELEMENTS
     private lateinit var question: TextView
@@ -44,7 +36,7 @@ class GamePlayActivity: Activity(){
     private lateinit var timeDisplay: TextView
 
     // DECLARED GAME VARIABLES
-    private var level: Int  = 0
+    private var level: Int = 0
     private var answer: Int = 0
 
     // DECLARED DB ACCESS VARIABLE
@@ -123,45 +115,40 @@ class GamePlayActivity: Activity(){
 
     // METHOD TO DISPLAY BALLOON GRID IN ANOTHER THREAD
     private fun displayBalloons() {
-        gHandler.postDelayed(displayBalloonsRunnable,  0)
+        gHandler.postDelayed(displayBalloonsRunnable, 0)
     }
 
     // METHOD START THE COUNTDOWN TIMER
-    private fun startTimer()
-    {
+    private fun startTimer() {
         object : CountDownTimer(60000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 timeDisplay.text = String.format("%02d", millisUntilFinished / 1000)
                 val currentscore: Int = getScore()
 
-                if(currentscore >= 10 && (millisUntilFinished / 1000) <=30 && level == 0)
-                {
+                if (currentscore >= 10 && (millisUntilFinished / 1000) <= 30 && level == 0) {
                     // start level 2
                     level = 1
                     displayBalloons()
                 }
-                if(currentscore >= 15 && (millisUntilFinished / 1000) <=45 && level == 1)
-                {
+                if (currentscore >= 15 && (millisUntilFinished / 1000) <= 45 && level == 1) {
                     // start level 3
                     level = 2
                     displayBalloons()
                 }
-                if(currentscore >= 30 && (millisUntilFinished / 1000) <=60 && level == 2)
-                {
-                    nHandler.postDelayed(gameNotificationsRunnable,  0)
+                if (currentscore >= 30 && (millisUntilFinished / 1000) <= 60 && level == 2) {
+                    nHandler.postDelayed(gameNotificationsRunnable, 0)
                 }
             }
 
             override fun onFinish() {
-                nHandler.postDelayed(gameNotificationsRunnable,  0)
+                nHandler.postDelayed(gameNotificationsRunnable, 0)
             }
         }.start()
     }
 
     // METHOD TO SAVE SHARED PREFERENCES SCORES
-    private fun saveScores()
-    {
+    private fun saveScores() {
         val myScore = getSharedPreferences("MyScores", Context.MODE_PRIVATE)
         val editor = myScore.edit().apply {
             putString("Level", getLevel().toString())
@@ -172,8 +159,7 @@ class GamePlayActivity: Activity(){
     }
 
     // METHOD TO RETRIEVE SHARED PREFERENCES SCORES
-    private fun getScores() : SharedPreferences
-    {
+    private fun getScores(): SharedPreferences {
         return getSharedPreferences("MyScores", Context.MODE_PRIVATE)
     }
 
@@ -197,7 +183,7 @@ class GamePlayActivity: Activity(){
     }
 
     // THREAD HANDLER FOR UPDATING BALLOON GRIDVIEW
-    private val displayBalloonsRunnable: Runnable = object: Runnable {
+    private val displayBalloonsRunnable: Runnable = object : Runnable {
         override fun run() {
 
             // set level
@@ -265,7 +251,7 @@ class GamePlayActivity: Activity(){
     }
 
     // THREAD HANDLER FOR UPDATING GAME NOTIFICATIONS
-    private val gameNotificationsRunnable: Runnable = object: Runnable {
+    private val gameNotificationsRunnable: Runnable = object : Runnable {
         override fun run() {
 
             val builder = AlertDialog.Builder(this@GamePlayActivity)
@@ -277,7 +263,7 @@ class GamePlayActivity: Activity(){
             val resultsView = customDialog.findViewWithTag("resultsTextView") as TextView
             resultsView.text = results.all.toString()
             builder.setTitle("Great Try!").setIcon(R.drawable.ic_notifications_black_24dp)
-            .setView(customDialog)
+                    .setView(customDialog)
 
             // Setting Positive "Yes" Btn
             builder.setPositiveButton("Try Again",
