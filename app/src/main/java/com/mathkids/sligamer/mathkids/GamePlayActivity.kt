@@ -179,7 +179,6 @@ class GamePlayActivity : Activity() {
                 timer.schedule(timerTask { balloonAnimation.stop() }, time.toLong() + 100L)
             }
         })
-        executorService.shutdown()
     }
 
     // THREAD HANDLER FOR UPDATING BALLOON GRIDVIEW
@@ -238,9 +237,7 @@ class GamePlayActivity : Activity() {
                             val currentImage = madapter.getView(position, view, parent) as ImageView
                             currentImage.setBackgroundResource(R.drawable.balloontransparent)
                             startAnimationFromBackgroundThread(currentImage)
-                            val timer = Timer()
-                            timer.schedule(timerTask { currentImage.setImageResource(R.mipmap.response_balloon) }, 1350)
-
+                            currentImage.setImageResource(R.mipmap.response_balloon)
                         }
                     }
                 } else {

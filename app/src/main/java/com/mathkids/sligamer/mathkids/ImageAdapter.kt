@@ -2,15 +2,16 @@ package com.mathkids.sligamer.mathkids
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.Paint.Align
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.Paint.Align
-import android.graphics.drawable.Drawable
-import android.util.Log
-import java.util.ArrayList
+import java.util.*
+
 
 /**
  * Created by Justin Freres on 4/10/2018.
@@ -21,6 +22,8 @@ import java.util.ArrayList
 class ImageAdapter(private val mContext: Context, private var questions: ArrayList<QuestionClass>?) : BaseAdapter() {
 
     // ARRAY OF BALLOON IMAGES
+    val width : Int = mContext.resources.getDimension(R.dimen.width).toInt()
+    val height: Int = mContext.resources.getDimension(R.dimen.height).toInt()
 
     override fun getCount(): Int = questions!!.size
 
@@ -49,15 +52,16 @@ class ImageAdapter(private val mContext: Context, private var questions: ArrayLi
             when(count)
             {
                 9 -> {
-                    imageView.layoutParams = ViewGroup.LayoutParams(400, 400)
+                    imageView.layoutParams = ViewGroup.LayoutParams(width, height)
                 }
                 12 -> {
-                    imageView.layoutParams = ViewGroup.LayoutParams(300, 300)
+                    imageView.layoutParams = ViewGroup.LayoutParams(width - 125, height - 125)
                 }
                 18 -> {
-                    imageView.layoutParams = ViewGroup.LayoutParams(200, 200)
+                    imageView.layoutParams = ViewGroup.LayoutParams(width - 275, height - 275)
                 }
             }
+
 
 
         } else {
@@ -84,7 +88,7 @@ class ImageAdapter(private val mContext: Context, private var questions: ArrayLi
             val textRect = Rect()
             paint.getTextBounds(text, 0, text.length, textRect)
             val canvas = Canvas(bm)
-            canvas.drawText(text, 85f, 65f, paint)
+            canvas.drawText(text, 110f, 85f, paint)
         }
         catch(e: Exception)
         {

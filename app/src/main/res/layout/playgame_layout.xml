@@ -2,14 +2,15 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constaintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="?android:attr/windowSwipeToDismiss"
     android:background="@drawable/mathmaniabackground"
     tools:layout_editor_absoluteY="25dp">
 
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginBottom="1dp"
@@ -147,6 +148,8 @@
         android:layout_marginTop="8dp"
         android:columnWidth="90dp"
         android:elevation="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
@@ -157,8 +160,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.088"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        app:layout_constraintVertical_bias="0.088" />
 
 </android.support.constraint.ConstraintLayout>
